@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Area</title>
+  <style>
+    /* Skip link for accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: #0078d4;
+      color: white;
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 0 0 4px 0;
+      z-index: 10000;
+      font-size: 14px;
+    }
+
+    .skip-link:focus {
+      top: 0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.3);
+      cursor: crosshair;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #selection-box {
+      position: absolute;
+      border: 2px solid #fff;
+      background: rgba(0, 150, 255, 0.2);
+      display: none;
+      pointer-events: none;
+    }
+
+    #info-panel {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 14px;
+      z-index: 1000;
+    }
+
+    .instructions {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 13px;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .instructions kbd {
+      background: #444;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+
+    #dimensions {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-family: monospace;
+      display: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+    }
+
+    .controls button {
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .controls button:hover {
+      background: rgba(50, 50, 50, 0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .controls button:active {
+      transform: translateY(0);
+    }
+
+    .controls button:focus-visible {
+      outline: 2px solid #0078d4;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.3);
+    }
+
+    .controls button.primary {
+      background: rgba(0, 150, 255, 0.8);
+      border-color: rgba(0, 150, 255, 0.5);
+    }
+
+    .controls button.primary:hover {
+      background: rgba(0, 150, 255, 0.9);
+      box-shadow: 0 4px 12px rgba(0, 150, 255, 0.4);
+    }
+
+    /* Loading state */
+    .controls button.loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .controls button.loading::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: translateY(-50%) rotate(360deg); }
+    }
+
+    /* Improved contrast for instructions */
+    .instructions kbd {
+      background: #4a4a4a;
+      color: #ffffff;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    /* Improved contrast for info panel */
+    #info-panel {
+      background: rgba(0, 0, 0, 0.9);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <main id="main-content">
+  <div id="info-panel" role="status" aria-live="polite" aria-atomic="true">Select area to capture</div>
+  <div id="selection-box" role="presentation" aria-hidden="true"></div>
+  <div id="dimensions" role="presentation" aria-hidden="true"></div>
+
+  <div class="instructions" role="region" aria-label="Selection instructions">
+    <kbd>Mouse Drag</kbd> to select area &nbsp;|&nbsp;
+    <kbd>Enter</kbd> to capture &nbsp;|&nbsp;
+    <kbd>Esc</kbd> to cancel
+  </div>
+
+  <div class="controls" role="group" aria-label="Capture controls">
+    <button id="fullscreen-btn" aria-label="Capture full screen instead of selecting area">Full Screen</button>
+  </div>
+  </main>
+
+  <!-- Live region for accessibility announcements -->
+  <div id="a11y-announcer" role="status" aria-live="assertive" aria-atomic="true" class="visually-hidden"></div>
+
+  <style>
+    /* Visually hidden but accessible to screen readers */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Enhanced keyboard navigation */
+    body.keyboard-navigation button:focus-visible {
+      outline: 2px solid #0078d4;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.3);
+    }
+  </style>
+
+  <script>
+    // Keyboard navigation enhancement
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        document.body.classList.add('keyboard-navigation');
+      }
+    });
+
+    document.addEventListener('mousedown', () => {
+      document.body.classList.remove('keyboard-navigation');
+    });
+
+    // Accessibility announcement function
+    function announce(message) {
+      const announcer = document.getElementById('a11y-announcer');
+      if (announcer) {
+        announcer.textContent = '';
+        setTimeout(() => {
+          announcer.textContent = message;
+        }, 100);
+      }
+    }
+
+    // Make announce function available globally
+    window.announceToScreenReader = announce;
+  </script>
+
+  <script src="renderer/selection.js"></script>
+</body>
+</html>
