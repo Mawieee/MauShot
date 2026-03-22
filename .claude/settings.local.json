@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node generate-icon.js:*)",
+      "Bash(npm install)",
+      "mcp__web-search-prime__webSearchPrime",
+      "Bash(npm start)",
+      "Bash(taskkill:*)",
+      "Bash(tasklist:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(cmd //c verify-fix.bat)",
+      "Bash(bash verify-fix.sh:*)",
+      "Bash(echo:*)",
+      "Bash(code:*)",
+      "Bash(\"/c/Program Files/Microsoft VS Code/Code.exe\" --version)",
+      "mcp__zai-mcp-server__ui_to_artifact",
+      "Bash(npx electron:*)",
+      "Bash(node_modules/.bin/electron.cmd:*)",
+      "Bash(if not exist \"C:\\\\Users\\\\Maui3\\\\Pictures\\\\Maushop\" mkdir \"C:\\\\Users\\\\Maui3\\\\Pictures\\\\Maushop\")",
+      "Bash(powershell -Command \"New-Item -ItemType Directory -Path ''C:\\\\Users\\\\Maui3\\\\Pictures\\\\Maushop'' -Force | Out-Null\")",
+      "Bash(powershell -Command \"Test-Path ''C:\\\\Users\\\\Maui3\\\\Pictures\\\\Maushop''\")",
+      "Bash(powershell -Command \"Get-ChildItem ''C:\\\\Users\\\\Maui3\\\\Pictures'' | Select-Object -First 5 Name\")",
+      "Bash(powershell -Command \"md ''C:\\\\Users\\\\Maui3\\\\Pictures\\\\Maushop''\")",
+      "Bash(powershell -Command \"\\(Get-Item ''C:\\\\Users\\\\Maui3\\\\Pictures''\\).LinkType\")",
+      "Bash(powershell -Command \"Get-Item ''C:\\\\Users\\\\Maui3\\\\Pictures\\\\Screenshots'' | Select-Object FullName, LinkType, Target\")",
+      "Bash(powershell -Command \"New-Item -ItemType Directory -Path ''C:\\\\Users\\\\Maui3\\\\Maushop'' -Force\")",
+      "Bash(powershell -Command \"''{0:N2} MB'' -f \\(\\(Get-ChildItem -Path ''C:\\\\Users\\\\Maui3\\\\Desktop\\\\myproj\\\\screenshot app'' -Recurse | Measure-Object -Property Length -Sum\\).Sum / 1MB\\)\")",
+      "Bash(powershell -Command:*)",
+      "mcp__zai-mcp-server__extract_text_from_screenshot",
+      "Bash(git mv:*)",
+      "Bash(git checkout:*)",
+      "Bash(del /f /s /q \"C:\\\\Users\\\\Maui3\\\\AppData\\\\Roaming\\\\*display-mapping.json\")",
+      "Bash(del /f /s /q \"C:\\\\Users\\\\Maui3\\\\AppData\\\\Local\\\\*display-mapping.json\")",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

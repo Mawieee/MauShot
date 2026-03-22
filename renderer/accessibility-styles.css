@@ -1,0 +1,309 @@
+/**
+ * Shared Accessibility Styles for MauShot
+ *
+ * This file contains accessibility-focused CSS that should be
+ * included in all HTML files to ensure consistent accessibility
+ * improvements across the application.
+ */
+
+/* Visually Hidden Class (for screen readers only) */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Skip Links for Accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #0078d4;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 10000;
+  font-size: 14px;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+/* Enhanced Focus Indicators for Keyboard Navigation */
+body.user-is-tabbing *:focus-visible {
+  outline: 2px solid #0078d4 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 4px rgba(0, 120, 212, 0.3) !important;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  *:focus-visible {
+    outline-width: 3px !important;
+    outline-color: #0078d4 !important;
+  }
+
+  button:focus-visible,
+  a:focus-visible {
+    outline: 3px solid #0078d4 !important;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Dark Mode Focus Indicators */
+@media (prefers-color-scheme: dark) {
+  body.user-is-tabbing *:focus-visible {
+    outline-color: #4fc3f7 !important;
+    box-shadow: 0 0 0 4px rgba(79, 195, 247, 0.3) !important;
+  }
+}
+
+/* Button Focus States */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+/* Button Active States */
+button:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* Loading States */
+.loading {
+  pointer-events: none;
+  opacity: 0.7;
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ensure sufficient color contrast */
+.text-high-contrast {
+  color: #e0e0e0;
+}
+
+.text-medium-contrast {
+  color: #b0b0b0;
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focusable element styles */
+[tabindex]:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+/* Disable outlines only when using mouse */
+body:not(.user-is-tabbing) *:focus {
+  outline: none;
+}
+
+/* Ensure keyboard users always see focus */
+body.user-is-tabbing *:focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+}
+
+/* Enhanced button hover states */
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+/* Enhanced card focus states */
+.screenshot-card:focus-visible {
+  outline: 2px solid #0078d4;
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(0, 120, 212, 0.2);
+}
+
+/* Modal accessibility */
+.modal[role="dialog"] {
+  z-index: 1000;
+}
+
+.modal[role="dialog"][aria-hidden="true"] {
+  display: none;
+}
+
+/* Toast notification accessibility */
+.toast[role="status"] {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-size: 14px;
+  z-index: 2000;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Live region styling */
+[aria-live] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Ensure form controls have proper labels */
+input:not([aria-label]):not([aria-labelledby]),
+select:not([aria-label]):not([aria-labelledby]),
+textarea:not([aria-label]):not([aria-labelledby]) {
+  border: 2px solid #ff6b6b;
+}
+
+input:not([aria-label]):not([aria-labelledby]):focus,
+select:not([aria-label]):not([aria-labelledby]):focus,
+textarea:not([aria-label]):not([aria-labelledby]):focus {
+  outline: 2px solid #ff6b6b;
+  outline-offset: 2px;
+}
+
+/* Image alt text warning (for development) */
+img:not([alt]) {
+  outline: 3px dashed #ff6b6b;
+  outline-offset: 2px;
+}
+
+img:not([alt]):after {
+  content: 'Missing alt text';
+  position: absolute;
+  background: #ff6b6b;
+  color: white;
+  padding: 2px 4px;
+  font-size: 12px;
+}
+
+/* Link indicator for accessibility */
+a:not([class]) {
+  color: #0078d4;
+  text-decoration: underline;
+}
+
+a:not([class]):hover {
+  color: #1084d8;
+  text-decoration: underline;
+}
+
+a:not([class]):focus {
+  outline: 2px solid #0078d4;
+  outline-offset: 2px;
+  background: rgba(0, 120, 212, 0.1);
+}
+
+/* Table accessibility */
+table {
+  border-collapse: collapse;
+}
+
+th {
+  background: #2d2d2d;
+  color: #e0e0e0;
+  padding: 8px 12px;
+  text-align: left;
+  border: 1px solid #3d3d3d;
+}
+
+td {
+  padding: 8px 12px;
+  border: 1px solid #3d3d3d;
+}
+
+/* Code block accessibility */
+code, kbd {
+  background: #2d2d2d;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 0.9em;
+}
+
+kbd {
+  border: 1px solid #4d4d4d;
+  box-shadow: 0 2px 0 #4d4d4d;
+}
+
+/* Landmark region indicators */
+[role="banner"],
+[role="navigation"],
+[role="main"],
+[role="complementary"],
+[role="contentinfo"] {
+  position: relative;
+}
+
+/* Print styles for accessibility */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+}

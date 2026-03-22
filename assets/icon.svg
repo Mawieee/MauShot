@@ -1,0 +1,26 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="256" height="256" rx="48" fill="#0078d4"/>
+
+  <!-- Screen icon -->
+  <rect x="48" y="56" width="160" height="112" rx="8" fill="white" opacity="0.95"/>
+  <rect x="56" y="64" width="144" height="96" rx="4" fill="#1e1e1e"/>
+
+  <!-- Crosshair/selection indicator -->
+  <line x1="80" y1="88" x2="120" y2="88" stroke="#0078d4" stroke-width="4" stroke-linecap="round"/>
+  <line x1="80" y1="88" x2="80" y2="128" stroke="#0078d4" stroke-width="4" stroke-linecap="round"/>
+
+  <line x1="176" y1="136" x2="136" y2="136" stroke="#0078d4" stroke-width="4" stroke-linecap="round"/>
+  <line x1="176" y1="136" x2="176" y2="96" stroke="#0078d4" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Selection corners -->
+  <path d="M 100 100 L 100 120 L 120 120" stroke="#ff0000" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 156 124 L 156 104 L 136 104" stroke="#ff0000" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Stand -->
+  <rect x="108" y="176" width="40" height="8" rx="4" fill="white" opacity="0.8"/>
+  <rect x="96" y="184" width="64" height="8" rx="4" fill="white" opacity="0.6"/>
+
+  <!-- Camera flash indicator -->
+  <circle cx="200" cy="80" r="8" fill="#ffeb3b"/>
+</svg>

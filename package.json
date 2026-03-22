@@ -1,0 +1,25 @@
+{
+  "name": "maushot",
+  "version": "1.0.0",
+  "description": "MauShot - A desktop screenshot application with annotation tools",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev"
+  },
+  "keywords": [
+    "screenshot",
+    "electron",
+    "desktop",
+    "annotation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0",
+    "jimp": "^0.22.12"
+  }
+}
