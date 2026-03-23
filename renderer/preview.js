@@ -37,6 +37,9 @@ class AnnotationController {
     this.annotations = [];
     this.currentFilePath = null;
 
+    // Zoom state
+    this.zoomLevel = 1.0;
+
     // Track text input state to avoid duplicate handlers
     this._textInputActive = false;
 
@@ -50,6 +53,7 @@ class AnnotationController {
     this.sizeInfo = document.getElementById('size-info');
     this.toolInfo = document.getElementById('tool-info');
     this.positionInfo = document.getElementById('position-info');
+    this.zoomInfo = document.getElementById('zoom-info');
 
     // Tool mappings
     this.toolButtons = {
@@ -73,6 +77,7 @@ class AnnotationController {
     this._setupIpcListeners();
     this._setupResizeHandles();
     this._setupMoreToolsDropdown();
+    this._setupZoom();
 
     console.log('Annotation controller initialized');
   }
@@ -154,6 +159,17 @@ class AnnotationController {
       // Escape - Close window
       else if (e.key === 'Escape') {
         window.close();
+      }
+      // Zoom shortcuts
+      else if ((e.ctrlKey || e.metaKey) && (e.key === '=' || e.key === '+')) {
+        e.preventDefault();
+        this._changeZoom(0.25);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === '-') {
+        e.preventDefault();
+        this._changeZoom(-0.25);
+      } else if ((e.ctrlKey || e.metaKey) && e.key === '0') {
+        e.preventDefault();
+        this._resetZoom();
       }
       // Tool shortcuts
       else if (e.key === 'r') {
@@ -323,6 +339,9 @@ class AnnotationController {
 
       // Update UI
       this.sizeInfo.textContent = `Size: ${img.width} × ${img.height}`;
+
+      // Apply initial zoom (fit to screen)
+      this._applyZoom();
 
       console.log('Image loaded successfully:', img.width, 'x', img.height, 'with initial padding');
     };
@@ -1529,6 +1548,87 @@ class AnnotationController {
     } else {
       this.moreToolsDropdown.classList.remove('show');
       this.moreToolsBtn.setAttribute('aria-expanded', 'false');
+    }
+  }
+
+  /**
+   * Set up zoom controls (wheel, buttons)
+   *
+   * @private
+   */
+  _setupZoom() {
+    // Ctrl+Wheel to zoom
+    this.canvasContainer.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.25 : -0.25;
+        this._changeZoom(delta);
+      }
+    }, { passive: false });
+
+    // Zoom buttons
+    document.getElementById('zoom-in-btn').addEventListener('click', () => this._changeZoom(0.25));
+    document.getElementById('zoom-out-btn').addEventListener('click', () => this._changeZoom(-0.25));
+    document.getElementById('zoom-reset-btn').addEventListener('click', () => this._resetZoom());
+  }
+
+  /**
+   * Change zoom level by a delta amount
+   *
+   * @param {number} delta - Amount to add to zoom level
+   * @private
+   */
+  _changeZoom(delta) {
+    this.zoomLevel = Math.min(8, Math.max(0.25, this.zoomLevel + delta));
+    this._applyZoom();
+  }
+
+  /**
+   * Reset zoom to fit-to-screen (1.0)
+   *
+   * @private
+   */
+  _resetZoom() {
+    this.zoomLevel = 1.0;
+    this._applyZoom();
+  }
+
+  /**
+   * Apply the current zoom level to the canvas element via CSS sizing.
+   * The existing scaleX/scaleY calculations in mouse handlers automatically
+   * compensate because they use canvas.width / rect.width.
+   *
+   * @private
+   */
+  _applyZoom() {
+    if (!this.canvas.width || !this.canvas.height) return;
+
+    const containerW = this.canvasContainer.clientWidth - 40;
+    const containerH = this.canvasContainer.clientHeight - 40;
+
+    // Fit scale: how large the canvas should be at zoomLevel=1 to fit the container
+    const fitScale = Math.min(
+      containerW / this.canvas.width,
+      containerH / this.canvas.height,
+      1
+    );
+
+    const displayW = Math.round(this.canvas.width * fitScale * this.zoomLevel);
+    const displayH = Math.round(this.canvas.height * fitScale * this.zoomLevel);
+
+    this.canvas.style.width = displayW + 'px';
+    this.canvas.style.height = displayH + 'px';
+    this.canvas.style.maxWidth = 'none';
+    this.canvas.style.maxHeight = 'none';
+
+    // Update zoom display
+    const pct = Math.round(this.zoomLevel * 100);
+    if (this.zoomInfo) {
+      this.zoomInfo.textContent = `Zoom: ${pct}%`;
+    }
+    const resetBtn = document.getElementById('zoom-reset-btn');
+    if (resetBtn) {
+      resetBtn.textContent = `${pct}%`;
     }
   }
 
