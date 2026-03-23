@@ -34,7 +34,9 @@
       "Bash(del /f /s /q \"C:\\\\Users\\\\Maui3\\\\AppData\\\\Local\\\\*display-mapping.json\")",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git filter-repo:*)",
+      "Bash(git --version)"
     ]
   }
 }
