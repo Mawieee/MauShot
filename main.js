@@ -324,6 +324,22 @@ class ScreenshotApplication {
     });
 
     /**
+     * Handle get startup setting request
+     */
+    ipcMain.on('get-startup-setting', (event) => {
+      const { openAtLogin } = app.getLoginItemSettings();
+      event.reply('startup-setting', openAtLogin);
+    });
+
+    /**
+     * Handle set startup setting request
+     */
+    ipcMain.on('set-startup-setting', (event, enabled) => {
+      app.setLoginItemSettings({ openAtLogin: enabled });
+      logger.info('Start with Windows set to:', enabled);
+    });
+
+    /**
      * Handle selection sync cancel - broadcast cancel to all selection windows
      */
     ipcMain.on('selection-sync-cancel', () => {

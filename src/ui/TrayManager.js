@@ -6,7 +6,7 @@
  * quick access to screenshot functions.
  */
 
-const { Tray, Menu, nativeImage } = require('electron');
+const { app, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const { createLogger } = require('../utils/logger');
 
@@ -135,6 +135,16 @@ class TrayManager {
         click: () => {
           this.logger.info('Tray: Open Gallery clicked');
           this.onOpenGallery();
+        }
+      },
+      { type: 'separator' },
+      {
+        label: 'Start with Windows',
+        type: 'checkbox',
+        checked: app.getLoginItemSettings().openAtLogin,
+        click: (menuItem) => {
+          app.setLoginItemSettings({ openAtLogin: menuItem.checked });
+          this.logger.info('Start with Windows:', menuItem.checked);
         }
       },
       { type: 'separator' },
